@@ -5,7 +5,7 @@
 
 <title>Linkly</title>
 <div
-	class="text-complement bg-dark flex min-h-screen min-w-screen flex-col items-center justify-center"
+	class="bg-bg dark:bg-bgd text-fg dark:text-fgd flex min-h-screen min-w-screen flex-col items-center justify-center"
 >
 	{@render children()}
 </div>

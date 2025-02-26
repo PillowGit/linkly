@@ -1,1 +1,9 @@
 @import 'tailwindcss';
+
+@theme {
+	--color-fg: #252323;
+	--color-fgd: #fff8f0;
+	--color-bg: #fff8f0;
+	--color-bgd: #252323;
+	--color-complement: #ff3a20;
+}
