@@ -7,3 +7,13 @@
 	--color-bgd: #252323;
 	--color-complement: #ff3a20;
 }
+
+/* Prefers dark */
+html {
+	background-color: var(--color-bg);
+}
+@media (prefers-color-scheme: dark) {
+	html {
+		background-color: var(--color-bgd);
+	}
+}
