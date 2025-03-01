@@ -8,7 +8,12 @@
 	--color-complement: #ff3a20;
 }
 
-/* Prefers dark */
+*,
+*::before,
+*::after {
+	margin: 0;
+	padding: 0;
+}
 html {
 	background-color: var(--color-bg);
 }
