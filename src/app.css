@@ -8,12 +8,6 @@
 	--color-complement: #ff3a20;
 }
 
-*,
-*::before,
-*::after {
-	margin: 0;
-	padding: 0;
-}
 html {
 	background-color: var(--color-bg);
 }
