@@ -16,7 +16,7 @@
 				<SignOut>
 					<div
 						slot="submitButton"
-						class="border-complement text-complement flex cursor-pointer justify-center rounded-md border-2 p-2 transition hover:scale-110 hover:font-medium"
+						class="border-complement text-complement hover:bg-complement-bg flex cursor-pointer justify-center rounded-md border-2 p-2 transition hover:scale-110 hover:font-medium"
 						role="button"
 						aria-pressed="false"
 						tabindex="0"
@@ -26,7 +26,7 @@
 				</SignOut>
 				<a href="/dashboard">
 					<div
-						class="border-complement text-complement ml-4 flex cursor-pointer justify-center rounded-md border-2 p-2 transition hover:scale-110 hover:font-medium"
+						class="border-complement text-complement hover:bg-complement-bg ml-4 flex cursor-pointer justify-center rounded-md border-2 p-2 transition hover:scale-110 hover:font-medium"
 						role="button"
 						aria-pressed="false"
 						tabindex="0"
@@ -39,7 +39,7 @@
 			<SignIn provider="google">
 				<div
 					slot="submitButton"
-					class="border-complement mt-6 flex cursor-pointer justify-center rounded-md border-2 p-2 transition hover:scale-110 hover:font-medium"
+					class="border-complement hover:bg-complement-bg mt-6 flex cursor-pointer justify-center rounded-md border-2 p-2 transition hover:scale-110 hover:font-medium"
 					role="button"
 					aria-pressed="false"
 					tabindex="0"
