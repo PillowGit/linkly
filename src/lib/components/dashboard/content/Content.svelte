@@ -84,7 +84,7 @@
 			<div class="mt-4">
 				<button
 					type="submit"
-					class="text-fgd rounded-2xl bg-red-500 p-3 text-xl transition hover:scale-105 hover:grayscale-25"
+					class="text-fgd bg-complement rounded-2xl p-3 text-xl transition hover:scale-105 hover:grayscale-25"
 				>
 					Get your link →
 				</button>
