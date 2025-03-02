@@ -22,6 +22,7 @@
 
 html {
 	background-color: var(--color-bg);
+	overflow-x: hidden;
 }
 @media (prefers-color-scheme: dark) {
 	html {
