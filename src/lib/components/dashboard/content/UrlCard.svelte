@@ -16,6 +16,7 @@
 	</div>
 	<!-- Buttons -->
 	<div class="mx-4 mb-4 flex h-6 w-[90%] items-center justify-between">
+		<!-- View Analytics -->
 		<div
 			class="mr-1 flex h-full items-center justify-center text-xs transition hover:scale-105 hover:cursor-pointer"
 		>
@@ -26,14 +27,18 @@
 			/>
 			<p>View Analytics</p>
 		</div>
+		<!-- Spacer -->
 		<div class="border-transparent-mixed mx-2 h-full border-[0.5px]"></div>
+		<!-- Edit -->
 		<div
 			class="text-complement2 mr-1 flex h-full items-center justify-center text-xs transition hover:scale-105 hover:cursor-pointer"
 		>
 			<img src="/icons/small_edit_icon.svg" alt="Edit Icon" class="mr-1 aspect-square h-[80%]" />
 			<p>Edit</p>
 		</div>
+		<!-- Spacer -->
 		<div class="border-transparent-mixed mx-2 h-full border-[0.5px]"></div>
+		<!-- Trash/Delete -->
 		<img
 			src="/icons/small_trash_icon.svg"
 			alt="Trash Icon"
