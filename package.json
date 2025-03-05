@@ -36,6 +36,7 @@
 	},
 	"dependencies": {
 		"@auth/sveltekit": "^1.8.0",
+		"@supabase/supabase-js": "^2.49.1",
 		"motion": "^12.4.7"
 	}
 }
