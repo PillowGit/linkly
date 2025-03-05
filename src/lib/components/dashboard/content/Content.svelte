@@ -42,7 +42,7 @@
 		<!-- Make URL/QR Code buttons -->
 		<div class="mt-6 flex h-14 w-full items-center justify-center">
 			<div
-				class="border-complement text-complement hover:bg-complement-bg flex h-full items-center rounded-lg border-[0.5px] transition hover:scale-105 hover:cursor-pointer"
+				class="border-complement text-complement focus:bg-complement-bg hover:bg-complement-bg flex h-full items-center rounded-lg border-[0.5px] transition hover:scale-105 hover:cursor-pointer focus:scale-105"
 				role="button"
 				aria-pressed="false"
 				tabindex="0"
@@ -54,7 +54,7 @@
 			</div>
 			<div class="mx-6 text-xl font-medium"><p>OR</p></div>
 			<div
-				class="border-complement2 text-complement2 hover:bg-complement2-bg flex h-full items-center rounded-lg border-[0.5px] transition hover:scale-105 hover:cursor-pointer"
+				class="border-complement2 text-complement2 focus:bg-complement2-bg hover:bg-complement2-bg flex h-full items-center rounded-lg border-[0.5px] transition hover:scale-105 hover:cursor-pointer focus:scale-105"
 				role="button"
 				aria-pressed="false"
 				tabindex="0"
@@ -84,7 +84,7 @@
 			<div class="mt-4">
 				<button
 					type="submit"
-					class="text-fgd bg-complement rounded-2xl p-3 text-xl transition hover:scale-105 hover:grayscale-25"
+					class="text-fgd bg-complement rounded-2xl p-3 text-xl transition hover:scale-105 hover:grayscale-25 focus:scale-105 focus:grayscale-25"
 				>
 					Get your link →
 				</button>
@@ -93,18 +93,10 @@
 		<!-- Shortlink cards -->
 		<div class="mt-8 text-xl font-medium"><h2>Your URLs:</h2></div>
 		<div class="mt-4"></div>
-		{#each { length: Math.floor(urls.length / 3) + 1 } as _, i}
-			{#if urls[i * 3] !== undefined}
-				<div class="mt-8 mb-8 flex h-44 items-center">
-					{#each { length: 3 } as _, j}
-						{#if urls[i * 3 + j] === undefined}
-							<div class="mx-4 w-[30%]"></div>
-						{:else}
-							<UrlCard urlData={urls[i * 3 + j]} />
-						{/if}
-					{/each}
-				</div>
-			{/if}
-		{/each}
+		<div class="flex flex-wrap items-center justify-start">
+			{#each urls as urlData}
+				<UrlCard {urlData} />
+			{/each}
+		</div>
 	</div>
 </div>

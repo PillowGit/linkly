@@ -17,7 +17,7 @@
 </script>
 
 <div
-	class="border-transparent-mixed bg-bg text-fg mx-4 flex h-full min-w-72 flex-col items-start justify-between rounded-lg border-2"
+	class="border-transparent-mixed bg-bg text-fg mb-6 ml-6 flex h-44 min-w-72 flex-col items-start justify-between rounded-lg border-2"
 >
 	<!-- Link Icons -->
 	<div class="mt-4 flex h-8 w-full items-center justify-between">
@@ -36,7 +36,11 @@
 	<!-- Link Title/URL -->
 	<div class="ml-4 flex w-full flex-col items-start justify-center">
 		<div class="text-lg font-bold"><h4>{urlData.title}</h4></div>
-		<a href={`https://linkly.sh/${urlData.id}`} target="_blank" rel="noopener noreferrer"
+		<a
+			href={`https://linkly.sh/${urlData.id}`}
+			target="_blank"
+			rel="noopener noreferrer"
+			class="transition hover:font-medium focus:font-medium"
 			><div class="text-sm underline"><p>linkly.sh/{urlData.id}</p></div></a
 		>
 	</div>
