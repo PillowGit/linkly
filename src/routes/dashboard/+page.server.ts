@@ -15,7 +15,8 @@ export const load: PageServerLoad = async (event) => {
 	const { data, error } = await supabase
 		.from('redirects')
 		.select()
-		.match({ owner_email: session.user.email });
+		.match({ owner_email: session.user.email })
+		.order('created_on', { ascending: false });
 	if (error) {
 		console.error(error);
 		return { error: 'An error occurred' };
