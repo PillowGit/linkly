@@ -66,6 +66,6 @@ export const actions: Actions = {
 			return { error: `An error occured: ${error.message}` };
 		}
 
-		return { success: true, shortUrl: 'your-short-url' };
+	  throw redirect(303, '/dashboard');
 	}
 };
