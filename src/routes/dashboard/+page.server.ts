@@ -1,6 +1,8 @@
 import type { PageServerLoad, Actions } from './$types';
 import { redirect } from '@sveltejs/kit';
 import type { Url } from '$lib/types';
+import { supabase } from '$lib/database/supabase';
+import { generateNewUrl } from '$lib/database/shorten';
 
 interface Data {
 	urls: Url[];
@@ -10,66 +12,58 @@ export const load: PageServerLoad = async (event) => {
 	const session = await event.locals.auth();
 	if (!session?.user) throw redirect(303, '/');
 
-	// Fetch data from server here somehow
+	const { data, error } = await supabase
+		.from('redirects')
+		.select()
+		.match({ owner_email: session.user.email });
+	if (error) {
+		console.error(error);
+		return { error: 'An error occurred' };
+	}
 
-	const data: Data = { urls: [] };
-
-	data.urls.push({
-		id: 'h-3n7Z',
-		destination: 'https://linkly.sh',
-		title: 'Linkly',
-		owner_email: 'example@gmail.com',
-		created_on: '2025-03-02T06:31:40.323Z'
-	});
-	data.urls.push({
-		id: 'vhAfCy',
-		destination: 'https://vercel.com/',
-		title: 'Vercel',
-		owner_email: 'example@gmail.com',
-		created_on: '2025-03-02T06:32:25.945Z'
-	});
-	data.urls.push({
-		id: '3j5rUn',
-		destination: 'https://svelte.dev/',
-		title: 'Svelte',
-		owner_email: 'example@gmail.com',
-		created_on: '2025-03-02T06:32:10.814Z'
-	});
-	data.urls.push({
-		id: 'fh-csuf',
-		destination: 'https://fullyhacks.acmcsuf.com/',
-		title: 'FullyHacks',
-		owner_email: 'example@gmail.com',
-		created_on: '2025-03-02T06:31:04.578Z'
-	});
-	data.urls.push({
-		id: 'cyls8b',
-		destination: 'https://fullyhacks.acmcsuf.com/',
-		title: 'Discord',
-		owner_email: 'example@gmail.com',
-		created_on: '2025-03-02T06:31:04.578Z'
-	});
-	data.urls.push({
-		id: 'joel',
-		destination: 'https://fullyhacks.acmcsuf.com/',
-		title: 'jdr.sh',
-		owner_email: 'example@gmail.com',
-		created_on: '2025-03-02T06:31:04.578Z'
-	});
-
-	return data;
+	return { urls: data };
 };
 
 export const actions: Actions = {
-	shorten: async ({ request }) => {
+	shorten: async (event) => {
+		// Get form data
+		const { request } = event;
+		const session = await event.locals.auth();
+		if (!session?.user) throw redirect(303, '/');
 		const formData = await request.formData();
 		const longUrl = formData.get('longUrl') as string;
 
+		// Verify URL was given
 		if (!longUrl) {
 			return { error: 'Please enter a URL.' };
 		}
 
-		// URL shortening logic here
+		// Check that it's a valid URL
+		try {
+			new URL(longUrl);
+		} catch {
+			return { error: 'Please enter a valid URL.' };
+		}
+
+		// Get a new url from the database
+		const shortUrl = await generateNewUrl(6);
+
+		const url_title = longUrl.split('://')[1].split('/')[0];
+
+		// Insert the new URL into the database
+		const { error } = await supabase.from('redirects').insert({
+			id: shortUrl,
+			destination: longUrl,
+			owner_email: session.user.email,
+			created_on: new Date().toISOString(),
+			title: url_title,
+			total_visits: 0
+		});
+
+		if (error) {
+			console.error(error);
+			return { error: `An error occured: ${error.message}` };
+		}
 
 		return { success: true, shortUrl: 'your-short-url' };
 	}
