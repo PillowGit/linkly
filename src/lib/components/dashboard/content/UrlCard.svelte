@@ -11,7 +11,9 @@
 		if (e instanceof KeyboardEvent && e.key !== 'Enter') {
 			return;
 		}
-		navigator.clipboard.writeText(`https://linkly.sh/${urlData.id}`);
+		if (confirm(`Copy https://linkly.sh/${urlData.id} to your clipboard?`)) {
+			navigator.clipboard.writeText(`https://linkly.sh/${urlData.id}`);
+		}
 	}
 	function ShowEditUrlMenu(e: KeyboardEvent | MouseEvent) {
 		if (e instanceof KeyboardEvent && e.key !== 'Enter') {
