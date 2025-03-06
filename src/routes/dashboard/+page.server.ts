@@ -134,38 +134,36 @@ export const actions: Actions = {
 		const session = await event.locals.auth();
 		if (!session?.user) throw redirect(303, '/');
 		const formData = await request.formData();
-		const longUrl = formData.get('longUrl') as string;
+		const id = formData.get('id') as string;
 
-		// Verify URL was given
-		if (!longUrl) {
-			return { error: 'Please enter a URL.' };
+		// Verify URL is valid
+		if (!id) {
+			return { error: 'No URL ID given.' };
 		}
 
-		// Check that it's a valid URL
-		try {
-			new URL(longUrl);
-		} catch {
-			return { error: 'Please enter a valid URL.' };
-		}
+		// Get old data from the database
+		const { data, error } = await supabase.from('redirects').select().match({ id });
 
-		// Get a new url from the database
-		const shortUrl = await generateNewUrl(6);
-
-		const url_title = longUrl.split('://')[1].split('/')[0];
-
-		// Insert the new URL into the database
-		const { error } = await supabase.from('redirects').insert({
-			id: shortUrl,
-			destination: longUrl,
-			owner_email: session.user.email,
-			created_on: new Date().toISOString(),
-			title: url_title,
-			total_visits: 0
-		});
-
+		// Error check the data
 		if (error) {
 			console.error(error);
-			return { error: `An error occured: ${error.message}` };
+			return { error: 'An error occurred' };
+		}
+		if (data.length === 0) {
+			return { error: 'No URL with matching id found' };
+		}
+
+		// Don't own this url
+		if (data[0].owner_email !== session.user.email) {
+			return { error: 'You do not own this URL' };
+		}
+
+		// Delete the URL from the database
+		const { error: deleteError } = await supabase.from('redirects').delete().match({ id });
+
+		if (deleteError) {
+			console.error(deleteError);
+			return { error: 'An error occurred' };
 		}
 
 		throw redirect(303, '/dashboard');
