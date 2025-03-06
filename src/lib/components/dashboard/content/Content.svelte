@@ -4,6 +4,10 @@
 	import type { Url } from '$lib/types';
 
 	import UrlCard from './UrlCard.svelte';
+	import QrCodeMenu from '../menus/QrCodeMenu.svelte';
+
+	// let show_url_gen_menu = $state(false);
+	let show_qr_code_menu = $state(false);
 
 	let { username, email, image, ...others } = $props();
 	const urls: Url[] = page.data.urls;
@@ -24,6 +28,13 @@
 			return;
 		}
 		alert('This feature is not implemented yet');
+	}
+	function ShowQrCodeMenu(e: KeyboardEvent | MouseEvent) {
+		if (e instanceof KeyboardEvent && e.key !== 'Enter') {
+			return;
+		}
+		show_qr_code_menu = false;
+		show_qr_code_menu = true;
 	}
 
 	onMount(() => {
@@ -58,8 +69,8 @@
 				role="button"
 				aria-pressed="false"
 				tabindex="0"
-				onclick={NotImplemented}
-				onkeydown={NotImplemented}
+				onclick={ShowQrCodeMenu}
+				onkeydown={ShowQrCodeMenu}
 			>
 				<img
 					src="/icons/blue_qr_code_icon.svg"
@@ -100,3 +111,4 @@
 		</div>
 	</div>
 </div>
+<QrCodeMenu showing={show_qr_code_menu} />
