@@ -4,6 +4,7 @@
 
 	import EditUrlMenu from '../menus/EditUrlMenu.svelte';
 
+	let delete_form: HTMLFormElement;
 	let show_edit_url_menu = $state(false);
 
 	function CopyURL(e: KeyboardEvent | MouseEvent) {
@@ -18,6 +19,14 @@
 		}
 		show_edit_url_menu = false;
 		show_edit_url_menu = true;
+	}
+	function Delete(e: KeyboardEvent | MouseEvent) {
+		if (e instanceof KeyboardEvent && e.key !== 'Enter') {
+			return;
+		}
+		if (confirm(`Are you sure you want to delete the shortlink ${urlData.title}?`)) {
+			delete_form.submit();
+		}
 	}
 	function Unimplemented(e: KeyboardEvent | MouseEvent) {
 		if (e instanceof KeyboardEvent && e.key !== 'Enter') {
@@ -90,16 +99,19 @@
 		<!-- Spacer -->
 		<div class="border-transparent-mixed mx-2 h-full border-[0.5px]"></div>
 		<!-- Trash/Delete -->
-		<div
-			class="mr-1 transition hover:scale-110 hover:cursor-pointer focus:scale-110"
-			role="button"
-			aria-pressed="false"
-			tabindex="0"
-			onclick={Unimplemented}
-			onkeydown={Unimplemented}
-		>
-			<img src="/icons/small_trash_icon.svg" alt="Trash Icon" class="aspect-square h-[80%]" />
-		</div>
+		<form bind:this={delete_form} method="POST" action="?/delete">
+			<input type="hidden" name="id" bind:value={urlData.id} />
+			<div
+				class="mr-1 transition hover:scale-110 hover:cursor-pointer focus:scale-110"
+				role="button"
+				aria-pressed="false"
+				tabindex="0"
+				onclick={Delete}
+				onkeydown={Delete}
+			>
+				<img src="/icons/small_trash_icon.svg" alt="Trash Icon" class="aspect-square h-[80%]" />
+			</div>
+		</form>
 	</div>
 </div>
 <EditUrlMenu showing={show_edit_url_menu} {urlData} />
