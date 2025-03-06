@@ -2,11 +2,22 @@
 	import type { Url } from '$lib/types';
 	let { urlData, ...others } = $props();
 
+	import EditUrlMenu from '../menus/EditUrlMenu.svelte';
+
+	let show_edit_url_menu = $state(false);
+
 	function CopyURL(e: KeyboardEvent | MouseEvent) {
 		if (e instanceof KeyboardEvent && e.key !== 'Enter') {
 			return;
 		}
 		navigator.clipboard.writeText(`https://linkly.sh/${urlData.id}`);
+	}
+	function ShowEditUrlMenu(e: KeyboardEvent | MouseEvent) {
+		if (e instanceof KeyboardEvent && e.key !== 'Enter') {
+			return;
+		}
+		show_edit_url_menu = false;
+		show_edit_url_menu = true;
 	}
 	function Unimplemented(e: KeyboardEvent | MouseEvent) {
 		if (e instanceof KeyboardEvent && e.key !== 'Enter') {
@@ -70,8 +81,8 @@
 			role="button"
 			aria-pressed="false"
 			tabindex="0"
-			onclick={Unimplemented}
-			onkeydown={Unimplemented}
+			onclick={ShowEditUrlMenu}
+			onkeydown={ShowEditUrlMenu}
 		>
 			<img src="/icons/small_edit_icon.svg" alt="Edit Icon" class="mr-1 aspect-square h-[80%]" />
 			<p>Edit</p>
@@ -91,3 +102,4 @@
 		</div>
 	</div>
 </div>
+<EditUrlMenu showing={show_edit_url_menu} {urlData} />

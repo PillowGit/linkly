@@ -74,38 +74,56 @@ export const actions: Actions = {
 		const session = await event.locals.auth();
 		if (!session?.user) throw redirect(303, '/');
 		const formData = await request.formData();
-		const longUrl = formData.get('longUrl') as string;
+		const title = formData.get('title') as string;
+		const destination = formData.get('destination') as string;
+		const id = formData.get('id') as string;
 
-		// Verify URL was given
-		if (!longUrl) {
-			return { error: 'Please enter a URL.' };
+		// Verify URL is valid
+		if (!id) {
+			return { error: 'No URL ID given.' };
 		}
-
-		// Check that it's a valid URL
+		if (!destination) {
+			return { error: 'Must have a URL.' };
+		}
 		try {
-			new URL(longUrl);
+			new URL(destination);
 		} catch {
 			return { error: 'Please enter a valid URL.' };
 		}
+		// Verify title is valid
+		if (!title) {
+			return { error: 'Must have a title.' };
+		}
 
-		// Get a new url from the database
-		const shortUrl = await generateNewUrl(6);
+		// Get old data from the database
+		const { data, error } = await supabase.from('redirects').select().match({ id });
 
-		const url_title = longUrl.split('://')[1].split('/')[0];
-
-		// Insert the new URL into the database
-		const { error } = await supabase.from('redirects').insert({
-			id: shortUrl,
-			destination: longUrl,
-			owner_email: session.user.email,
-			created_on: new Date().toISOString(),
-			title: url_title,
-			total_visits: 0
-		});
-
+		// Error check the data
 		if (error) {
 			console.error(error);
-			return { error: `An error occured: ${error.message}` };
+			return { error: 'An error occurred' };
+		}
+		if (data.length === 0) {
+			return { error: 'No URL found' };
+		}
+
+		// Don't own this url
+		if (data[0].owner_email !== session.user.email) {
+			return { error: 'You do not own this URL' };
+		}
+
+		// Update the URL in the database, only if we need to
+		if (data[0].destination === destination && data[0].title === title) {
+			return { success: 'No changes made' };
+		}
+		const { error: updateError } = await supabase
+			.from('redirects')
+			.update({ destination, title })
+			.match({ id });
+
+		if (updateError) {
+			console.error(updateError);
+			return { error: 'An error occurred' };
 		}
 
 		throw redirect(303, '/dashboard');
