@@ -102,9 +102,9 @@
 				class="mr-8 transition hover:scale-110 hover:cursor-pointer hover:invert-50 focus:scale-110 focus:invert-50"
 			>
 				<img
-					src="/icons/download_icon.svg"
+					src="/icons/check.svg"
 					alt="Download Icon"
-					class="aspect-square h-12 dark:invert-100"
+					class="aspect-square h-12 text-fgd bg-complement rounded-2xl p-3 text-xl transition hover:scale-105 focus:scale-105" 
 				/>
 			</a>
 		</div>
