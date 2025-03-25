@@ -29,6 +29,5 @@ export const load: PageServerLoad = async (event) => {
 		await supabase.rpc('IncrementVisits', { url_id: shortlink });
 	})();
 
-	console.log(data[0].destination);
 	throw redirect(308, data[0].destination);
 };

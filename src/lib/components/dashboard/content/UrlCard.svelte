@@ -1,8 +1,12 @@
 <script lang="ts">
+	import { page } from '$app/state';
 	import type { Url } from '$lib/types';
 	let { urlData, ...others } = $props();
 
 	import EditUrlMenu from '../menus/EditUrlMenu.svelte';
+
+	const page_url = page.url.origin;
+	const redirect_url = `${page_url}/${urlData.id}`;
 
 	let delete_form: HTMLFormElement;
 	let show_edit_url_menu = $state(false);
@@ -11,8 +15,8 @@
 		if (e instanceof KeyboardEvent && e.key !== 'Enter') {
 			return;
 		}
-		if (confirm(`Copy https://linkly.sh/${urlData.id} to your clipboard?`)) {
-			navigator.clipboard.writeText(`https://linkly.sh/${urlData.id}`);
+		if (confirm(`Copy ${redirect_url} to your clipboard?`)) {
+			navigator.clipboard.writeText(redirect_url);
 		}
 	}
 	function ShowEditUrlMenu(e: KeyboardEvent | MouseEvent) {
@@ -59,7 +63,7 @@
 	<div class="ml-4 flex w-full flex-col items-start justify-center">
 		<div class="text-lg font-bold"><h4>{urlData.title}</h4></div>
 		<a
-			href={`https://linkly.sh/${urlData.id}`}
+			href={redirect_url}
 			target="_blank"
 			rel="noopener noreferrer"
 			class="transition hover:font-medium focus:font-medium"
