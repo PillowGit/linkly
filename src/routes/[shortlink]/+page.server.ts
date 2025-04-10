@@ -1,7 +1,6 @@
 import type { PageServerLoad, Actions } from './$types';
 import { redirect } from '@sveltejs/kit';
 import { supabase } from '$lib/database/supabase';
-import geoip from 'geoip-lite';
 
 export const load: PageServerLoad = async (event) => {
 	const { params, request } = event;
@@ -19,15 +18,18 @@ export const load: PageServerLoad = async (event) => {
 
 	// Don't await these, let them run in the background so the user gets their redirect faster
 	(async () => {
+		const ip = request.headers.get('x-forwarded-for') || event.getClientAddress();
+		const req = await fetch(`http://ip-api.com/json/${ip}`);
+		const geo = await req.json();
+		const country = geo?.status === 'fail' ? 'Unknown' : geo?.country;
 		await supabase.from('interactions').insert({
 			url: shortlink,
 			created_on: new Date().toISOString(),
-			country: geoip.lookup(
-				request.headers.get('x-forwarded-for')?.split(',')[0] || request.headers.get('remote_addr')
-			)?.country
+			country,
+			ip
 		});
 		await supabase.rpc('IncrementVisits', { url_id: shortlink });
 	})();
 
-	throw redirect(308, data[0].destination);
+	throw redirect(307, data[0].destination);
 };
