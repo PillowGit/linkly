@@ -1,5 +1,5 @@
 <script lang="ts">
-	let { showing, urlData, ...others } = $props();
+	let { showing, ...others } = $props();
 
 	interface FormData {
 		title: string;
@@ -7,9 +7,9 @@
 		id: string;
 	}
 	let formData: FormData = {
-		title: urlData.title,
-		destination: urlData.destination,
-		id: urlData.id
+		title: '',
+		destination: '',
+		id: ''
 	};
 
 	function StopShowing(e: KeyboardEvent | MouseEvent) {
@@ -45,27 +45,25 @@
 	>
 		<!-- Title -->
 		<div class="mt-8 flex w-full items-center justify-between text-2xl font-medium">
-			<h1 class="ml-8">Update URL Info</h1>
+			<h1 class="ml-8 underline">Create a new shortlink</h1>
 			<img
-				src="/icons/small_white_edit_icon.svg"
+				src="/icons/white_link_icon.svg"
 				alt="Link Icon"
-				class="mr-8 aspect-square h-8 grayscale-100 invert-100 dark:invert-0"
+				class="mr-8 aspect-square h-8 invert-100 dark:invert-0"
 			/>
 		</div>
 		<!-- Form -->
-		<div class="mt-12"></div>
-		<form method="POST" action="?/update" class="flex w-full flex-col items-center">
-			<div class="w-full text-2xl font-medium">
-				<h1 class="ml-8 underline">{urlData.title}:</h1>
-			</div>
+		<div class="mt-6"></div>
+		<form method="POST" action="?/custom" class="flex w-full flex-col items-center">
 			<div class="mt-4 flex w-full flex-col text-xl">
-				<h1 class="ml-8">Shortlink Title:</h1>
+				<h1 class="ml-8">Shortlink Title/Nickname:</h1>
 				<input
 					type="text"
 					name="title"
 					bind:value={formData.title}
 					class="mt-2 ml-8 h-10 w-3/4 rounded-md border-[0.5px] p-3"
 					placeholder="Linkly"
+					required
 				/>
 			</div>
 			<div class="mt-4 flex w-full flex-col text-xl">
@@ -76,15 +74,29 @@
 					bind:value={formData.destination}
 					class="mt-2 ml-8 h-10 w-3/4 rounded-md border-[0.5px] p-3"
 					placeholder="https://linkly.sh"
+					required
 				/>
 			</div>
-			<input type="hidden" name="id" bind:value={formData.id} />
-			<div class="w-full">
-				<button
-					type="submit"
-					class="text-fgd bg-complement mt-6 ml-8 justify-self-start rounded-2xl p-3 text-xl transition hover:scale-105 hover:grayscale-25 focus:scale-105 focus:grayscale-25"
-					>Update</button
-				>
+			<div class="mt-4 flex w-full flex-col text-xl">
+				<h1 class="ml-8">Shortlink:</h1>
+				<div class="mt-2 flex w-full items-center justify-start">
+					<div class="mr-1 ml-8">https://linkly/</div>
+					<input
+						type="text"
+						name="id"
+						bind:value={formData.id}
+						class="h-10 w-1/4 rounded-md border-[0.5px] p-3"
+						placeholder="abc123"
+						required
+					/>
+				</div>
+				<div class="w-full">
+					<button
+						type="submit"
+						class="text-fgd bg-complement mt-6 mb-8 ml-8 justify-self-start rounded-2xl p-3 text-xl transition hover:scale-105 hover:grayscale-25 focus:scale-105 focus:grayscale-25"
+						>Create</button
+					>
+				</div>
 			</div>
 		</form>
 		<!-- Menu Info 

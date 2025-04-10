@@ -5,9 +5,11 @@
 
 	import UrlCard from './UrlCard.svelte';
 	import QrCodeMenu from '../menus/QrCodeMenu.svelte';
+	import CustomCodeMenu from '../menus/CustomCodeMenu.svelte';
 
 	// let show_url_gen_menu = $state(false);
 	let show_qr_code_menu = $state(false);
+	let show_custom_code_menu = $state(false);
 
 	let { username, email, image, ...others } = $props();
 	const urls: Url[] = page.data.urls;
@@ -23,11 +25,12 @@
 		longUrl: ''
 	};
 
-	function NotImplemented(e: KeyboardEvent | MouseEvent) {
+	function ShowCustomCodeMenu(e: KeyboardEvent | MouseEvent) {
 		if (e instanceof KeyboardEvent && e.key !== 'Enter') {
 			return;
 		}
-		alert('This feature is not implemented yet');
+		show_custom_code_menu = false;
+		show_custom_code_menu = true;
 	}
 	function ShowQrCodeMenu(e: KeyboardEvent | MouseEvent) {
 		if (e instanceof KeyboardEvent && e.key !== 'Enter') {
@@ -57,8 +60,8 @@
 				role="button"
 				aria-pressed="false"
 				tabindex="0"
-				onclick={NotImplemented}
-				onkeydown={NotImplemented}
+				onclick={ShowCustomCodeMenu}
+				onkeydown={ShowCustomCodeMenu}
 			>
 				<img src="/icons/link_icon.svg" alt="Link Icon" class="mx-2 aspect-square h-[55%]" />
 				<div class="mr-2 text-xl font-bold"><p>Short Link</p></div>
@@ -112,3 +115,4 @@
 	</div>
 </div>
 <QrCodeMenu showing={show_qr_code_menu} />
+<CustomCodeMenu showing={show_custom_code_menu} />

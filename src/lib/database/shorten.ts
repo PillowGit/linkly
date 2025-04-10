@@ -31,4 +31,4 @@ async function generateNewUrl(length: number): Promise<string> {
 	return result;
 }
 
-export { generateNewUrl };
+export { generateNewUrl, checkIfIdExists };

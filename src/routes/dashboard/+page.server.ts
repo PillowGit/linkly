@@ -2,7 +2,7 @@ import type { PageServerLoad, Actions } from './$types';
 import { redirect } from '@sveltejs/kit';
 import type { Url } from '$lib/types';
 import { supabase } from '$lib/database/supabase';
-import { generateNewUrl } from '$lib/database/shorten';
+import { generateNewUrl, checkIfIdExists } from '$lib/database/shorten';
 
 interface Data {
 	urls: Url[];
@@ -58,6 +58,57 @@ export const actions: Actions = {
 			owner_email: session.user.email,
 			created_on: new Date().toISOString(),
 			title: url_title,
+			total_visits: 0
+		});
+
+		if (error) {
+			console.error(error);
+			return { error: `An error occured: ${error.message}` };
+		}
+
+		throw redirect(303, '/dashboard');
+	},
+	custom: async (event) => {
+		// Get form data
+		const { request } = event;
+		const session = await event.locals.auth();
+		if (!session?.user) throw redirect(303, '/');
+		const formData = await request.formData();
+		const title = formData.get('title') as string;
+		const destination = formData.get('destination') as string;
+		const id = formData.get('id') as string;
+
+		// Verify URL was given
+		if (!destination) {
+			return { error: 'Please enter a URL.' };
+		}
+
+		// Check that it's a valid URL
+		try {
+			new URL(destination);
+		} catch {
+			return { error: 'Please enter a valid URL.' };
+		}
+		// Check that title is given
+		if (!title) {
+			return { error: 'Please enter a title.' };
+		}
+		// Check that id is given
+		if (!id) {
+			return { error: 'Please enter a custom URL.' };
+		}
+		// Check that id is valid
+		if (await checkIfIdExists(id)) {
+			return { error: 'That URL already exists.' };
+		}
+
+		// Insert the new URL into the database
+		const { error } = await supabase.from('redirects').insert({
+			id,
+			destination,
+			title,
+			owner_email: session.user.email,
+			created_on: new Date().toISOString(),
 			total_visits: 0
 		});
 
