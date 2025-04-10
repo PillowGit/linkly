@@ -19,7 +19,7 @@ export const load: PageServerLoad = async (event) => {
 	// Don't await these, let them run in the background so the user gets their redirect faster
 	(async () => {
 		const ip = request.headers.get('x-forwarded-for') || event.getClientAddress();
-		const req = await fetch(`http://ip-api.com/json/${ip}`);
+		const req = await fetch(`http://ip-api.com/json/${ip}?fields=status,country`);
 		const geo = await req.json();
 		const country = geo?.status === 'fail' ? 'Unknown' : geo?.country;
 		await supabase.from('interactions').insert({
