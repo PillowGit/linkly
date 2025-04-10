@@ -4,12 +4,14 @@
 	let { urlData, ...others } = $props();
 
 	import EditUrlMenu from '../menus/EditUrlMenu.svelte';
+	import Analytics from './Analytics.svelte';
 
 	const page_url = page.url.origin;
 	const redirect_url = `${page_url}/${urlData.id}`;
 
 	let delete_form: HTMLFormElement;
 	let show_edit_url_menu = $state(false);
+	let show_analytics = $state(false);
 
 	function CopyURL(e: KeyboardEvent | MouseEvent) {
 		if (e instanceof KeyboardEvent && e.key !== 'Enter') {
@@ -18,6 +20,13 @@
 		if (confirm(`Copy ${redirect_url} to your clipboard?`)) {
 			navigator.clipboard.writeText(redirect_url);
 		}
+	}
+	function ShowAnalytics(e: KeyboardEvent | MouseEvent) {
+		if (e instanceof KeyboardEvent && e.key !== 'Enter') {
+			return;
+		}
+		show_analytics = false;
+		show_analytics = true;
 	}
 	function ShowEditUrlMenu(e: KeyboardEvent | MouseEvent) {
 		if (e instanceof KeyboardEvent && e.key !== 'Enter') {
@@ -78,8 +87,8 @@
 			role="button"
 			aria-pressed="false"
 			tabindex="0"
-			onclick={Unimplemented}
-			onkeydown={Unimplemented}
+			onclick={ShowAnalytics}
+			onkeydown={ShowAnalytics}
 		>
 			<img
 				src="/icons/small_analytics_icon.svg"
@@ -121,3 +130,4 @@
 	</div>
 </div>
 <EditUrlMenu showing={show_edit_url_menu} {urlData} />
+<Analytics showing={show_analytics} {urlData} />
