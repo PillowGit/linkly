@@ -1,38 +1,74 @@
-# sv
+# Environment
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
-
-## Creating a project
-
-If you're seeing this, you've probably already done this step. Congrats!
+Configure the environment variables based on the `.env.example` file into a
+`.env` file at the root of the project.
 
 ```bash
-# create a new project in the current directory
-npx sv create
+# Google NextAuth Credentials
+GOOGLE_CLIENT_ID="clientid"
+GOOGLE_CLIENT_SECRET="clientsecret"
+AUTH_SECRET="authsecret"
 
-# create a new project in my-app
-npx sv create my-app
+# Supabase Credentials
+SUPABASE_URL="https://something.supabase.co"
+SUPABASE_KEY="supabasekey"
+
 ```
 
-## Developing
+The google client id, client, and auth secrets can be obtained by creating an
+OAuth 2.0 client ID in the Google Cloud Console.
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+The Supabase URL and key can be obtained by creating a new project in Supabase.
+
+# Developing
+
+Install dependenies with npm:
+
+```bash
+npm install
+```
+
+Then run the development server:
 
 ```bash
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
-## Building
+Ensure you have the environment variables set up in a `.env` file in the root of
+the project.
 
-To create a production version of your app:
+# Deploying
+
+## Vercel
+
+Vercel is the recommended deployment platform for a basic project like this.
+
+1. Add this folder as a repo on your github account
+2. Log into vercel and link your github
+3. Deploy the repo on Vercel with the SvelteKit template and add the .env variables
+
+## Node server
+
+Whether you're deploying on a droplet or self hosted server or something, this
+can be deployed as a node server. In the `sveltekit.config.js` file, change the
+adapter to use the node adapter and comment out the vercel adapter:
+
+```js
+import adapter from '@sveltejs/adapter-node';
+// import adapter from '@sveltejs/adapter-vercel';
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+// ...
+```
+
+Then build the project with:
 
 ```bash
 npm run build
 ```
 
-You can preview the production build with `npm run preview`.
+This will create a `build` folder with the compiled project. You can then run
+the project with:
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+```bash
+node build/index.js
+```
